@@ -1,0 +1,25 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Project {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  projectDate DateTime
+  thumbnail   String
+  description String
+  projectType String         @default("photography")
+  images      ProjectImage[]
+}
+
+model ProjectImage {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  url       String
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId String  @db.ObjectId
+}
